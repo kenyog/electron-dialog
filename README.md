@@ -18,8 +18,10 @@ npm intall electron-dialogbox --save-dev
 
 ### Howto use
 
-This is simple example for using this module from Electron's Main process.
+This is simple example for using this module.
 
+
+* First, main process program.
 ```
 const { app } = require('electron')
 const eDialog = require('electron-dialogbox');
@@ -33,6 +35,30 @@ app.on('ready', async function() {
     } esle {
       // some procedures for 'CANCEL' button clicked.
     }
+```
+
+* second, displayed html.
+```
+<html>
+  <head>
+    <script>
+      const eDialog = require('electron-dialogbox');
+      var self = eDialog.getInstance();
+
+      var message = self.parameter;
+      window.onload = function() {
+        document.querySelector('#parameter').innerHTML = message;
+      };
+    </script>
+  </head>
+  <body>
+    <h2>Simple message dialog example</h2>
+    <p id="parameter"></p>
+    <button onclick="self.exitSuccess('ok')">OK</button>
+    <button onclick="self.exitSuccess('cancel')">Cancel</button>
+    <button onclick="self.exitFailure('error')">Error</button>
+  </body>
+</html>
 ```
 
 ## License

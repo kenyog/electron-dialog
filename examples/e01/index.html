@@ -4,9 +4,8 @@
       const eDialog = require('electron-dialogbox');
       var dialog = eDialog.getInstance();
 
-      var message = dialog.parameter;
       window.onload = function() {
-        document.querySelector('#parameter').innerHTML = message;
+        document.querySelector('#parameter').innerHTML = dialog.parameter;
       };
     </script>
   </head>
