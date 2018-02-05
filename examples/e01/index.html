@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <script>
+      const eDialog = require('electron-dialogbox');
+      var dialog = eDialog.getInstance();
+
+      var message = dialog.parameter;
+      window.onload = function() {
+        document.querySelector('#parameter').innerHTML = message;
+      };
+    </script>
+  </head>
+  <body>
+    <h2>Simple message dialog example</h2>
+    <p id="parameter"></p>
+    <button onclick="dialog.exitSuccess('ok')">OK</button>
+    <button onclick="dialog.exitSuccess('cancel')">Cancel</button>
+    <button onclick="dialog.exitFailure('error')">Error</button>
+  </body>
+</html>

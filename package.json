@@ -1,0 +1,22 @@
+{
+  "name": "electron-dialogbox",
+  "version": "0.1.0",
+  "description": "The utility for making simple html base dialog box for Electron base application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "electron",
+    "dialog",
+    "window",
+    "BrowserWindow",
+    "async",
+    "promise"
+  ],
+  "author": "kenyog",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^1.7.11"
+  }
+}
