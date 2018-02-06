@@ -28,8 +28,8 @@ const eDialog = require('electron-dialogbox');
 
 app.on('ready', async function() {
     let result = await eDialog.showDialog(
-      'file:///'+__dirname+'/index.html', {width: 400, height: 300},
-      'simple dialog diaplaying test.' );
+          'file:///'+__dirname+'/index.html', {width: 400, height: 300},
+          'simple dialog diaplaying test.' );
     if (result==='OK') {
       // some procedures for 'OK' button clicked.
     } esle {
@@ -42,21 +42,17 @@ app.on('ready', async function() {
 <html>
   <head>
     <script>
-      const eDialog = require('electron-dialogbox');
-      var self = eDialog.getInstance();
-
-      var message = self.parameter;
       window.onload = function() {
-        document.querySelector('#parameter').innerHTML = message;
+        document.querySelector('#msg').innerHTML = dialog.argument;
       };
     </script>
   </head>
   <body>
     <h2>Simple message dialog example</h2>
-    <p id="parameter"></p>
-    <button onclick="self.exitSuccess('ok')">OK</button>
-    <button onclick="self.exitSuccess('cancel')">Cancel</button>
-    <button onclick="self.exitFailure('error')">Error</button>
+    <p id="msg"></p>
+    <button onclick="dialog.exit('ok')">OK</button>
+    <button onclick="dialog.exit('cancel')">Cancel</button>
+    <button onclick="dialog.fail('error')">Error</button>
   </body>
 </html>
 ```
