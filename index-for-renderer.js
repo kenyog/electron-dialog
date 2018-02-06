@@ -1,3 +1,4 @@
+'use strict';
 
 const { remote } = require('electron');
 const eDialog = remote.require(require.resolve('./index-for-main'));

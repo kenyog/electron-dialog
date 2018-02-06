@@ -1,8 +1,13 @@
+'use strict';
+
+// Node.js modules.
+const path = require('path');
 
 // Electron modules.
 const {BrowserWindow} = require('electron');
 
 
+// constant definition.
 const DEFAULT_OPTIONS = {
   resizable: false,
   minimizable: false,
@@ -31,16 +36,19 @@ class Dialog extends BrowserWindow {
     selfInstances.set(this.id, this);
   }
 
+  exit(result) { this.exitSuccess(result); }
   exitSuccess(result) {
     this.outData_ = result;
     this.close();
   }
 
+  fail(result) { this.exitFailure(result); }
   exitFailure(error) {
     this.errData_ = error;
     this.close();
   }
 
+  get argument() { return this.parameter; }
   get parameter() {
     return this.inData_;
   }
@@ -59,11 +67,12 @@ function makeOptions(userOptions) {
     var opt  = Object.assign({}, DEFAULT_OPTIONS);
   }
 
+  wp.preload = path.join(__dirname,'preload.js');
   opt.webPreferences = wp;
   return opt;
 }
 
-eDialog = {
+var eDialog = {
   showDialog: function(url, options, input) {
     return new Promise((resolve,reject) => {
       let opt = makeOptions(options);
