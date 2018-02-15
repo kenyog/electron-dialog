@@ -32,35 +32,54 @@ const DEFAULT_OPTIONS_DIALOG = {
 var selfInstances = new Map();
 
 
-class Dialog extends BrowserWindow {
+class Dialog {
 
-  constructor(input, options) {
-    super(options);
-    this.inData_ = input;
-    this.outData_ = null;
-    this.errData_ = null;
-    selfInstances.set(this.id, this);
+  constructor(url, options, input) {
+    this.args = input;
+    this.isSuccess = true;
+    this.result = null;
+
+    this.window = new BrowserWindow(options);
+    this.window.setMenu(options.dialog.menu);
+    this.window.loadURL(url);
+    this.window.on('closed', () => {
+      selfInstances.delete(this.window);
+      this.window = null;
+    });
+    selfInstances.set(this.window, this);
   }
 
   exit(result) { this.exitSuccess(result); }
   exitSuccess(result) {
-    this.outData_ = result;
-    this.close();
+    this.isSuccess = true;
+    this.result = result;
+    this.window.close();
   }
 
   fail(result) { this.exitFailure(result); }
-  exitFailure(error) {
-    this.errData_ = error;
-    this.close();
+  exitFailure(result) {
+    this.isSuccess = false;
+    this.result = result;
+    this.window.close();
+  }
+
+  get browserWindow() { return this.window; }
+
+  get resultPromise() {
+    return new Promise((resolve, reject) => {
+      this.window.on('closed', () => {
+        if (this.isSuccess) {
+          resolve(this.result);
+        } else {
+          reject(this.result);
+        }
+      });
+    });
   }
 
   get argument() { return this.parameter; }
   get parameter() {
-    return this.inData_;
-  }
-
-  get result() {
-    return [this.errData_, this.outData_];
+    return this.args;
   }
 }
 
@@ -83,28 +102,17 @@ function makeOptions(userOptions) {
 
 var eDialog = {
   showDialog: function(url, options, input) {
-    return new Promise((resolve,reject) => {
-      let opt = makeOptions(options);
-      let dialog = new Dialog(input, opt);
-
-      dialog.setMenu(opt.dialog.menu);
-      dialog.loadURL(url);
-      dialog.on('ready-to-show', () => {
-        dialog.show();
-      });
-      dialog.on('closed', () => {
-        var [err, out] = dialog.result;
-        if (err) {
-          reject(err);
-        } else {
-          resolve(out);
-        }
-      });
+    let opt = makeOptions(options);
+    let dialog = new Dialog(url, opt, input);
+    dialog.browserWindow.on('ready-to-show', () => {
+      dialog.browserWindow.show();
     });
+
+    return dialog.resultPromise;
   },
 
   getInstance: function(browserWindow) {
-    return selfInstances.get(browserWindow.id);
+    return selfInstances.get(browserWindow);
   },
 };
 

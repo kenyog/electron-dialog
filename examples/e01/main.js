@@ -14,7 +14,7 @@ app.on('ready', async function() {
   } catch(e) {
     console.log('dialog emit error: ', e);
   }
-  app.quit();
+  //app.quit();
 })
 
 
