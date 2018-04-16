@@ -10,7 +10,7 @@
   "author": "kenyog",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.7.12",
+    "electron": "^1.8.4",
     "electron-dialogbox": "file:../.."
   },
   "dependencies": {

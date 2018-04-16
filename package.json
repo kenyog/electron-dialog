@@ -17,7 +17,7 @@
   "author": "kenyog",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.7.11"
+    "electron": "^1.8.4"
   },
   "dependencies": {
     "is-electron-renderer": "^2.0.1"
