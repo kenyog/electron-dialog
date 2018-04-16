@@ -1,6 +1,6 @@
 {
   "name": "electron-dialogbox",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "The utility for making simple html base dialog box for Electron base application.",
   "main": "index.js",
   "scripts": {
