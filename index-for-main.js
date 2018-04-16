@@ -26,7 +26,7 @@ const DEFAULT_OPTIONS_WP = {
 
 const DEFAULT_OPTIONS_DIALOG = {
   menu: null,
-  javascript: null,
+  preload: null,
 };
 
 var selfInstances = new Map();
@@ -38,9 +38,10 @@ class Dialog {
     this.args = input;
     this.isSuccess = true;
     this.result = null;
+    this.options = makeOptions(options);
 
-    this.window = new BrowserWindow(options);
-    this.window.setMenu(options.dialog.menu);
+    this.window = new BrowserWindow(this.options);
+    this.window.setMenu(this.options.dialog.menu);
     this.window.loadURL(url);
     this.window.on('closed', () => {
       selfInstances.delete(this.window);
@@ -81,6 +82,9 @@ class Dialog {
   get parameter() {
     return this.args;
   }
+  get _preload() {
+    return this.options.dialog.preload;
+  }
 }
 
 function makeOptions(userOptions) {
@@ -94,7 +98,9 @@ function makeOptions(userOptions) {
     var opt  = Object.assign({}, DEFAULT_OPTIONS);
   }
 
-  wp.preload = path.join(__dirname,'preload.js');
+  if (!wp.preload) {
+    wp.preload = path.join(__dirname,'preload.js');
+  }
   opt.webPreferences = wp;
   opt.dialog = dopt;
   return opt;
@@ -102,8 +108,7 @@ function makeOptions(userOptions) {
 
 var eDialog = {
   showDialog: function(url, options, input) {
-    let opt = makeOptions(options);
-    let dialog = new Dialog(url, opt, input);
+    let dialog = new Dialog(url, options, input);
     dialog.browserWindow.on('ready-to-show', () => {
       dialog.browserWindow.show();
     });
